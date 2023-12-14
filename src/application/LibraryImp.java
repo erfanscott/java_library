@@ -5,15 +5,24 @@ import lib.exceptions.BadTargetEntityTypeException;
 import lib.exceptions.EntityNotFoundException;
 import lib.exceptions.InvalidInputException;
 import lib.exceptions.InvalidRequestedActionException;
-import lib.statepattern.LibState;
-import lib.statepattern.states.Main;
+import lib.LibState;
+import application.libraryImpstates.Main;
 
 import java.util.*;
 
+/**
+ * This is an implementation of the Library interface using the singleton and the state design patterns.
+ * <p>This implementation provides with a single instance of the library as all the actions are performed on one particular library.</p>
+ * <p>All the elements of the library are stored in a HashMap and all the library actions run over this map.</p>
+ * <p>It also makes use of an scanner to pass through the different states of the library so they can all use the same scanner without<br/>
+ * having to be concerned about any memory leaks.</p>
+ * <p>A unique ID generator has also been provided to be used when creating new library entities.</p>
+ *
+ * @see LibState
+ */
+
 public class LibraryImp implements Library {
-    /**
-     * Singleton implementation of the one object used in the application
-     */
+
     private static LibraryImp libInstance;
     private long IDCounter = 5L;
     private Scanner scanner;
@@ -24,9 +33,6 @@ public class LibraryImp implements Library {
         return String.valueOf(IDCounter++);
     }
 
-    /**
-     * implementing state pattern for the UI part of the code
-     */
     private LibState state;
 
     @Override
@@ -45,6 +51,12 @@ public class LibraryImp implements Library {
         }
     }
 
+    /**
+     * The constructor of LibraryImp objects
+     * <p>It initializes the scanner of the library</p>
+     * <p>It also adds some default elements to the library</p>
+     * <p>It has been defined as private so no instances other than the one created inside the {@link #getLibInstance() getLibInstance} method can be created</p>
+     */
     private LibraryImp() {
         scanner = new Scanner(System.in);
 
@@ -55,12 +67,22 @@ public class LibraryImp implements Library {
 
     }
 
+    /**
+     * This method implements the lazy initialization of the singleton pattern's instance.
+     * <p>It is a static method so the the using class can get the library instance by the LibraryImp class name as
+     * it is not possible for it to instantiate the class</p>
+     * <p>It has been implemented in such a way so the single instance of the library will not be created at the loading of the class and instead the library
+     * will be instantiated when the using class first call this method when it actually needs the instance</p>
+     *
+     * @return
+     */
     public static LibraryImp getLibInstance() {
         if (libInstance == null)
             libInstance = new LibraryImp();
         return libInstance;
     }
 
+    @Override
     public Scanner getScanner() {
         return this.scanner;
     }
