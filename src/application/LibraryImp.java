@@ -40,6 +40,13 @@ public class LibraryImp implements Library {
         this.state = state;
     }
 
+    /**
+     * <p>To managing the states that the library is supposed to work at based on the user's selection,
+     * this method calls the action method of each state and the state itself decides what the next state should be.
+     * then the library is set to be at the state that is returned by the previous state and utilizing an always-true while loop
+     * the action method of this new state is called and this loop goes on until the user decides to terminate the app using the Exit menu
+     * </p>
+     */
     @Override
     public void start() {
         System.out.println("\033[0;32m");

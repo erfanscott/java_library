@@ -7,6 +7,12 @@ import lib.exceptions.InvalidRequestedActionException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * This interface describes the common behaviors of libraries.
+ * <p>It makes classes reusable for different implementations of the library and makes codes easier to maintain</p>
+ *
+ * @see Entity
+ */
 public interface Library {
 
     /**
