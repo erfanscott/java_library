@@ -40,6 +40,9 @@ public class Main implements LibState {
 
     /**
      * This method displays the user interface for the main menu, receives the input, and decides on the next state
+     * <p>In case the user wants to see the whole content of the library It could Enter 4 and all the entities of the
+     * library will be printed out on the screen. This might not be the best practice but it was added so someone assessing the
+     * program could see the results easier and it is not a part of the actual application</p>
      *
      * @return the next state that {@link #library the library} is supposed to go to
      */

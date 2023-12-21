@@ -27,6 +27,7 @@ public interface Library {
      * @throws EntityNotFoundException if "e" is not found in the library
      */
     void delete(Entity e) throws EntityNotFoundException;
+    
 
     /**
      * @param book   the book to be borrowed.
