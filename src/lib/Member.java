@@ -49,7 +49,7 @@ public class Member extends Person {
             builder.append(book.toString() + "/");
         }
         String borrowedBooksString = builder.toString();
-        return String.format("id:%s, %s, Borrowed books: %s", ID, super.getName(), borrowedBooksString);
+        return String.format("id:%s, Name: %s, Gender: %s, Borrowed books: %s", ID, super.getName(), super.getGender().toString(), borrowedBooksString);
 
     }
 

@@ -106,26 +106,31 @@ public class Members implements LibState {
              * if no Entity with that ID exists in the library an EntityNotFoundException will be caught and dealt with </p>
              */
             void editMember() {
+
                 try {
                     System.out.print("Enter your ID:");
                     String id = scanner.next();
                     Member member = library.retrieve(id, Member.class);
                     System.out.print("Enter your new name:");
-                    String name = scanner.next();
+                    String newName = scanner.next();
                     System.out.println("What is your new gender? 1)Male 2)Female:");
                     int selectedItem = library.getUserSelectedItem(1, 2);
-                    Gender gender = (selectedItem == 1) ? Gender.MALE : Gender.FEMALE;
-                    member.setName(name);
-                    member.setGender(gender);
+                    Gender newGender = (selectedItem == 1) ? Gender.MALE : Gender.FEMALE;
+
+                    library.update(member, new EntityUpdate() {
+                        public String name = newName;
+                        public Gender gender = newGender;
+                    });
+
                     System.out.println("The Member has been successfully updated:");
                     member.showOnConsole();
                 } catch (EntityNotFoundException e) {
                     System.out.println("The member was not found");
                 } catch (BadTargetEntityTypeException e) {
                     System.out.println("The member was not found");
+                } catch (Exception e) {
+                    System.out.println("something went wrong, try again");
                 }
-
-
             }
 
             /**

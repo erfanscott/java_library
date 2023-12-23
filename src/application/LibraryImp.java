@@ -8,6 +8,7 @@ import lib.exceptions.InvalidRequestedActionException;
 import lib.LibState;
 import application.libraryImpstates.Main;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -66,7 +67,7 @@ public class LibraryImp implements Library {
      */
     private LibraryImp() {
         scanner = new Scanner(System.in);
-
+        scanner.useDelimiter("\\n");
         save(new Book("white nights", "dastayevski", "1"));
         save(new Book("crime and punishment", "Rahman Iraji", "2"));
         save(new Member("Erfan Mirhoseini", Gender.MALE, "3"));
@@ -120,6 +121,65 @@ public class LibraryImp implements Library {
         if (library.remove(e.getID()) == null)
             throw new EntityNotFoundException();
     }
+
+    /**
+     * This method replaces updates certain fields of an entity by their new values specified in an instance of EntityUpdate class
+     * <p>There are probably numerous ways to implement updating of an object.
+     * It was deliberately written this way so the programmer would get his hands dirty on the subject of "Reflection".
+     * The generalized code makes it easy for it to be used for any type of entity without having to change anything.
+     * The using method just needs to create an object from type EntityUpdate with the fields that are to be changed in the target entity.
+     * </p>
+     *
+     * @param e      The entity that is to be updated based on the fields inside EntityUpdate parameter
+     * @param update An object containing the fields that are to be updated and their new value
+     * @throws Exception The author can not come up with a scenario in which an IllegalAccessException would be thrown but as better safe than sorry, this situation is semi-handled by throwing an Exception
+     */
+    @Override
+    public void update(Entity e, EntityUpdate update) throws Exception {
+
+        Field[] changes = update.getClass().getDeclaredFields();
+        HashMap<String, Field> entityFields = getAllFields(e.getClass());
+
+
+        for (Field field : changes) {
+            try {
+
+                Field toBeChangedField = entityFields.get(field.getName());
+                if (toBeChangedField == null)
+                    throw new NoSuchFieldException();
+
+                toBeChangedField.setAccessible(true);
+                field.setAccessible(true);
+
+                toBeChangedField.set(e, field.get(update));
+
+            } catch (NoSuchFieldException exception) {
+                continue;
+            } catch (IllegalAccessException exception) {
+                throw new Exception();
+            }
+        }
+
+
+    }
+
+    /**
+     * @param classObject the class object of the class that its fields are to be extracted
+     * @return a Map containing all the fields including inherited fields of classObject's corresponding class with their name as keys
+     */
+    public HashMap<String, Field> getAllFields(Class classObject) {
+        if (classObject == null)
+            return new HashMap<>();
+
+        HashMap<String, Field> fieldsBuffer = getAllFields(classObject.getSuperclass());
+
+        for (Field field : classObject.getDeclaredFields())
+            fieldsBuffer.put(field.getName(), field);
+
+        return fieldsBuffer;
+
+    }
+
 
     @Override
     public void borrowBook(Book book, Member member) throws InvalidRequestedActionException {

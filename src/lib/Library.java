@@ -27,7 +27,14 @@ public interface Library {
      * @throws EntityNotFoundException if "e" is not found in the library
      */
     void delete(Entity e) throws EntityNotFoundException;
-    
+
+    /**
+     * @param e      The entity that is to be updated based on the fields inside EntityUpdate parameter
+     * @param update An object containing the fields that are to be updated and their new value
+     * @throws Exception when the implementing class decides to
+     */
+    void update(Entity e, EntityUpdate update) throws Exception;
+
 
     /**
      * @param book   the book to be borrowed.
