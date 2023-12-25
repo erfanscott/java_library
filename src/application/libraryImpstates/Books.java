@@ -153,7 +153,7 @@ public class Books implements LibState {
             String bookId = scanner.next();
             Book book = library.retrieve(bookId, Book.class);
             library.returnBook(book, member);
-            System.out.println("The book was successfully deleted");
+            System.out.println("The book was successfully returned");
         } catch (EntityNotFoundException e) {
             System.out.println("Nothing associated with this ID was found in the library");
         } catch (InvalidRequestedActionException e) {
@@ -180,6 +180,7 @@ public class Books implements LibState {
             String bookId = scanner.next();
             Book book = library.retrieve(bookId, Book.class);
             library.borrowBook(book, member);
+            member.showOnConsole();
         } catch (EntityNotFoundException e) {
             System.out.println("Nothing associated with this ID was found in the library");
         } catch (InvalidRequestedActionException e) {

@@ -82,7 +82,7 @@ public class LibraryImp implements Library {
      * <p>It has been implemented in such a way so the single instance of the library will not be created at the loading of the class and instead the library
      * will be instantiated when the using class first call this method when it actually needs the instance</p>
      *
-     * @return
+     * @return the library instance
      */
     public static LibraryImp getLibInstance() {
         if (libInstance == null)
@@ -192,8 +192,8 @@ public class LibraryImp implements Library {
 
     @Override
     public void returnBook(Book book, Member member) throws InvalidRequestedActionException {
-        if (book.getAvailability().equals(BookAvailability.AVAILABLE))
-            throw new InvalidRequestedActionException("The book has not even been borrowed. It can't be returned");
+        if (!member.hasBorrowed(book))
+            throw new InvalidRequestedActionException("This user has not borrowed this book");
         book.setAvailability(BookAvailability.AVAILABLE);
         member.removeFromBorrowed(book);
     }

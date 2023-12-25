@@ -66,12 +66,11 @@ public class Member extends Person {
      * removes a book from {@link #borrowedBooks the borrowed books list}
      *
      * @param book the book that is to be removed from {@link #borrowedBooks the borrowed books list}
-     * @throws InvalidRequestedActionException if the book does not exist in the borrowed books list
      */
-    public void removeFromBorrowed(Book book) throws InvalidRequestedActionException {
-        String bookId = book.getID();
-        if (borrowedBooks.get(bookId) == null)
-            throw new InvalidRequestedActionException("This member has not borrowed this book");
+    public void removeFromBorrowed(Book book) {
+        
+        if (!this.hasBorrowed(book))
+            return;
         borrowedBooks.remove(book.getID());
 
     }
@@ -91,4 +90,9 @@ public class Member extends Person {
         String searchTarget = this.getName().toLowerCase();
         return searchTarget.contains(key.toLowerCase());
     }
+
+    public boolean hasBorrowed(Book book) {
+        return (borrowedBooks.get(book.getID()) == null) ? false : true;
+    }
+
 }
